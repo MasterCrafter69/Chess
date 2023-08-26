@@ -1,6 +1,6 @@
 # Chess
 
-A program in python to play chess
+A program in python to play chess. I like chess and programming and by combining the two I can learn new things about both.
 
 input: algebraic notation
 output: agebraic notation
