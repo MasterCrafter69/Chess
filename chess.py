@@ -1,31 +1,9 @@
+import pygame
+import sys
+
+# Función simplificada para calcular el valor
 def value(pawn, knight, bishop, rook, queen):
-    score = 0
-    if pawn > 0:
-        c = 0
-        while pawn > c:
-            score += 1
-            c += 1
-    if knight > 0:
-        c = 0
-        while knight > c:
-            score += 3
-            c += 1
-    if bishop > 0:
-        c = 0
-        while bishop > c:
-            score += 3
-            c += 1
-    if rook > 0:
-        c = 0
-        while rook > c:
-            score += 5
-            c += 1
-    if queen > 0:
-        c = 0
-        while queen > c:
-            score += 9
-            c += 1
-    return score
+    return pawn + 3 * (knight + bishop) + 5 * rook + 9 * queen
 
 def main():
     pawn = int(input("how many pawns did you capture?"))
@@ -35,4 +13,38 @@ def main():
     queen = int(input("how many queens did you capture?"))
     print("your score is:", value(pawn, knight, bishop, rook, queen))
 
+# Configuraciones de pygame
+ANCHO, ALTO = 640, 640
+FILAS, COLUMNAS = 8, 8
+TAMAÑO_CASILLA = ANCHO // COLUMNAS
+
+BLANCO = (255, 255, 255)
+NEGRO = (0, 0, 0)
+
+def dibuja_tablero():
+    ventana.fill(BLANCO)
+    for fila in range(FILAS):
+        color_actual = BLANCO if fila % 2 == 0 else NEGRO
+        for col in range(COLUMNAS):
+            pygame.draw.rect(ventana, color_actual, (col * TAMAÑO_CASILLA, fila * TAMAÑO_CASILLA, TAMAÑO_CASILLA, TAMAÑO_CASILLA))
+            color_actual = NEGRO if color_actual == BLANCO else BLANCO
+    pygame.display.flip()
+
+pygame.init()
+
+ventana = pygame.display.set_mode((ANCHO, ALTO))
+pygame.display.set_caption("Tablero con Pygame")
+
+dibuja_tablero()
+
+corriendo = True
+while corriendo:
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            corriendo = False
+            break
+
+pygame.quit()
+
+# Ahora llamamos a main para que el usuario introduzca las piezas capturadas
 main()
