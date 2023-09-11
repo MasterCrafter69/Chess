@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-# Función simplificada para calcular el valor
+
 def value(pawn, knight, bishop, rook, queen):
     return pawn + 3 * (knight + bishop) + 5 * rook + 9 * queen
 
@@ -46,5 +46,5 @@ while corriendo:
 
 pygame.quit()
 
-# Ahora llamamos a main para que el usuario introduzca las piezas capturadas
+
 main()
