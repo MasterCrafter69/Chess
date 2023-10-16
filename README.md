@@ -1,15 +1,15 @@
 # Chess PGN Recorder
 
 ## Overview
-The Chess PGN Recorder is a Python-based program designed to assist chess players and enthusiasts in recording, documenting, and saving their games in the Portable Game Notation (PGN) format. With a user-friendly command-line interface, this program not only captures individual moves, but also allows users to document meta information about the game, such as event, date, players, and more.
+The Chess PGN Recorder is a Python-based program designed to assist chess players and enthusiasts in recording, documenting, and saving their games in the Portable Game Notation (PGN) format. With a user-friendly command-line interface, this program not only captures individual moves, but also allows users to document meta information about the game, such as event, date, players, and more. Additionally, it offers insight into algebraic notation in chess and provides details about PGN files.
 
 ## Features
 
 1. **Record Game Moves**:
     - Record individual moves for both White and Black.
-    - The move recording format supports standard chess notations.
+    - The move recording format supports standard chess notations, including algebraic notation.
     - Special move notations (e.g., checks, castling, en passant) are recognized and can be included in the statistics.
-    - Users can add comments to specific moves.
+    - Users can add comments to specific moves. These comments are written within curly brackets `{}` and can be added after the move.
 
 2. **Add Game Information**:
     - Store meta information of the chess game including: 
@@ -30,11 +30,14 @@ The Chess PGN Recorder is a Python-based program designed to assist chess player
 5. **Helpful Menus**:
     - The program provides clear and straightforward menus to guide users through the process, making it easy for users to navigate and use the software effectively.
 
+6. **Information on Algebraic Notation and PGN Files**:
+    - The "Information" option provides a comprehensive overview of the algebraic notation used in chess. It also offers details about PGN files, their structure, and their significance in the chess community.
+
 ## How to Use
 
 1. **Main Menu**:
     - **Create game**: Begin the process of recording a new game.
-    - **Information**: Provides an overview of the program and its functionalities.
+    - **Information**: Access an overview of the program, algebraic notation in chess, and details about PGN files.
     - **Exit program**: Safely close the program.
 
 2. **Game Menu**:
@@ -55,3 +58,5 @@ The Chess PGN Recorder is a Python-based program designed to assist chess player
     - `0-0` for Short castling (Kingside castling)
     - `0-0-0` for Long castling (Queenside castling)
     - `a.p` for En passant capture
+
+Comments on specific moves can be added by using curly brackets `{}` after the move. For example: `1. e4 e5 {This is the start of the King's Pawn Opening}`.
