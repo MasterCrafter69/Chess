@@ -60,3 +60,5 @@ The Chess PGN Recorder is a Python-based program designed to assist chess player
     - `a.p` for En passant capture
 
 Comments on specific moves can be added by using curly brackets `{}` after the move. For example: `1. e4 e5 {This is the start of the King's Pawn Opening}`.
+
+You can upload your PGN file to this page to see the movements: https://es.chesstempo.com/pgn-viewer/
