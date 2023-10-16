@@ -1,12 +1,17 @@
-# Chess PGN Recorder
-# Author: Daniel Aguilar Darío
-# Description: This program allows users to record and save chess games in PGN format.
+"""
+Chess PGN Recorder
+
+Author: Daniel Aguilar Darío
+Description: This program allows users to record and save chess games in PGN format.
+"""
+
 
 # Menu functions
 def menu1():
     print("1. Create game")
     print("2. Information")
     print("3. Exit program")
+
 
 def menu2():
     print("1. Record game moves")
@@ -15,7 +20,6 @@ def menu2():
     print("4. Add comments to moves")
     print("5. Create .PGN file")
     print("6. Return to main menu")
-
 
 
 # Input: None
@@ -30,6 +34,7 @@ def tags():
         str_matrix.append([tag, value])
     
     return str_matrix
+
 
 # Input: Existing game moves
 # Process: Records the moves made by white and black players
@@ -61,6 +66,7 @@ def moves(game):
         move_number += 1
 
     return game
+
 
 # Input: Game moves
 # Process: Calculates the number of different types of moves made by both players
@@ -123,6 +129,7 @@ def comments(game):
         else:
             print("There's no black move for this turn to comment on!")
 
+
 # Input: List of tags and game moves
 # Process: Displays the game in PGN format and offers to save it to a .pgn file
 # Output: Saves the game to a .pgn file if user agrees
@@ -148,6 +155,7 @@ def PGN(str_matrix, game):
             file.write("\n")
         print(f"PGN saved as {file_name}.PGN!")
 
+
 # Read and display the content of the info.txt file
 def read_info():
     try:
@@ -156,6 +164,7 @@ def read_info():
             print(content)
     except FileNotFoundError:
         print("Error: info.txt file not found!")
+
 
 # Main function
 def main():
@@ -192,4 +201,3 @@ def main():
             print("Invalid option, try again.")
 
 main()
-
