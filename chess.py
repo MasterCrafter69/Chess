@@ -1,69 +1,163 @@
-import pygame
-import sys
+# Funciones de menú
+def menu1():
+    print("1. Create game")
+    print("2. Information")
+    print("3. Exit program")
 
-# Función para calcular el valor basado en piezas capturadas
-def value(pieces):
-    values = {'pawn': 1, 'knight': 3, 'bishop': 3, 'rook': 5, 'queen': 9}
-    return sum(values[piece] * count for piece, count in pieces.items())
+def menu2():
+    print("1. Record game moves")
+    print("2. Add game information")
+    print("3. Statistics")
+    print("4. Create .pgn file")
+    print("5. Return to main menu")
 
-def main():
-    # Usamos un diccionario para almacenar las piezas y evitar repetir código
-    pieces = {
-        'pawn': 0,
-        'knight': 0,
-        'bishop': 0,
-        'rook': 0,
-        'queen': 0
-    }
+# Funciones previamente definidas
+def tags():
+    roster = ["Event", "Site", "Date", "Round", "White", "Black", "Result"]
+    str_matrix = []
+    
+    for tag in roster:
+        value = input(f"Enter the value for {tag}: ")
+        str_matrix.append([tag, value])
+    
+    return str_matrix
 
-    for piece in pieces.keys():
-        pieces[piece] = int(input(f"how many {piece}s did you capture?"))
+def moves(game):
+    move_number = 1
+    terminaciones = ['#', '1/2-1/2', '*']
+    
+    while True:
+        # Solicita la jugada de las blancas
+        white_move = input(f"Jugada {move_number} Blancas: ")
 
-    # Muestra la puntuación calculada
-    print(f"your score is: {value(pieces)}")
-
-# Configuraciones iniciales de pygame
-ANCHO, ALTO = 640, 640
-FILAS, COLUMNAS = 8, 8
-TAMAÑO_CASILLA = ANCHO // COLUMNAS
-
-# Colores utilizados
-BLANCO = (255, 255, 255)
-NEGRO = (0, 0, 0)
-
-# Matriz para representar el tablero
-# Por ahora está vacío, pero puedes poner piezas en él
-# Ejemplo: tablero[0][0] = 'pawn' representa un peón en la esquina superior izquierda
-tablero = [[None for _ in range(COLUMNAS)] for _ in range(FILAS)]
-
-def dibuja_tablero():
-    ventana.fill(BLANCO)
-    for fila in range(FILAS):
-        color_actual = BLANCO if fila % 2 == 0 else NEGRO
-        for col in range(COLUMNAS):
-            pygame.draw.rect(ventana, color_actual, (col * TAMAÑO_CASILLA, fila * TAMAÑO_CASILLA, TAMAÑO_CASILLA, TAMAÑO_CASILLA))
-            color_actual = NEGRO if color_actual == BLANCO else BLANCO
-            # Si hay una pieza en la casilla, la dibujas (aquí solo es un ejemplo de cómo hacerlo)
-            if tablero[fila][col]:
-                piece_text = font.render(tablero[fila][col], True, (255,0,0))  # Renderiza el nombre de la pieza como texto
-                ventana.blit(piece_text, (col * TAMAÑO_CASILLA + TAMAÑO_CASILLA // 4, fila * TAMAÑO_CASILLA + TAMAÑO_CASILLA // 4))
-
-    pygame.display.flip()
-
-pygame.init()
-ventana = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("Tablero con Pygame")
-font = pygame.font.SysFont(None, 36)  # Fuente para dibujar texto (piezas en este caso)
-
-dibuja_tablero()
-
-corriendo = True
-while corriendo:
-    for evento in pygame.event.get():
-        if evento.type == pygame.QUIT:
-            corriendo = False
+        # Si el usuario presiona "Enter" sin ingresar una jugada o ingresa una terminación, terminamos el bucle
+        if not white_move or any(terminacion in white_move for terminacion in terminaciones):
+            game.append((white_move,))
             break
 
-pygame.quit()
+        # Solicita la jugada de las negras
+        black_move = input(f"Jugada {move_number} Negras: ")
+
+        # Si detecta una terminación en la jugada de las negras, terminamos el bucle
+        if any(terminacion in black_move for terminacion in terminaciones):
+            game.append((white_move, black_move))
+            break
+
+        # Añade las jugadas a la matriz game
+        game.append((white_move, black_move))
+        
+        move_number += 1
+        
+    return game
+        
+def statistics(game):
+    notations = {
+        '+': 'Check',
+        '#': 'Checkmate',
+        '!': 'Good move',
+        '!!': 'Excellent move',
+        '?': 'Bad move',
+        '??': 'Very bad move',
+        '0-0': 'Short castling',
+        '0-0-0': 'Long castling',
+        'a.p': 'En passant capture'
+    }
+    
+    white_statistics = {key: 0 for key in notations}
+    black_statistics = {key: 0 for key in notations}
+
+    for moves in game:
+        for index, color_stats in enumerate([white_statistics, black_statistics]):
+            if index < len(moves):
+                move = moves[index]
+                for notation, description in notations.items():
+                    color_stats[notation] += move.count(notation)
+
+    print("White's Statistics:")
+    for notation, description in notations.items():
+        print(f"{description}: {white_statistics[notation]}")
+
+    print("\nBlack's Statistics:")
+    for notation, description in notations.items():
+        print(f"{description}: {black_statistics[notation]}")
+
+def comments(game):
+    move_num = int(input("Enter the move number you want to comment on: "))
+    if move_num > len(game) or move_num <= 0:
+        print("Invalid move number!")
+        return
+
+    color = input("Is the comment for white (w) or black (b)? ").lower()
+    if color not in ['w', 'b']:
+        print("Invalid color choice!")
+        return
+
+    comment = input("Write your comment: ")
+
+    index = move_num - 1
+    if color == 'w':
+        move_with_comment = game[index][0] + " " + comment
+        game[index] = (move_with_comment, game[index][1])
+    else:
+        if len(game[index]) == 2:
+            move_with_comment = game[index][1] + " " + comment
+            game[index] = (game[index][0], move_with_comment)
+        else:
+            print("There's no black move for this turn to comment on!")
+
+def pgn(str_matrix, game):
+    for tag, value in str_matrix:
+        print(f"[{tag} \"{value}\"]")
+    print()
+    
+    for index, (white, *black) in enumerate(game, start=1):
+        print(f"{index}. {white} {' '.join(black)}", end=" ")
+    print("\n")
+
+    save_file = input("Do you want to save it as a .pgn file? (yes/no): ").lower()
+    if save_file == 'yes':
+        file_name = input("Enter the name for the .pgn file (without extension): ")
+        with open(file_name + ".pgn", "w") as file:
+            for tag, value in str_matrix:
+                file.write(f"[{tag} \"{value}\"]\n")
+            file.write("\n")
+            
+            for index, (white, *black) in enumerate(game, start=1):
+                file.write(f"{index}. {white} {' '.join(black)} ")
+            file.write("\n")
+        print(f"PGN saved as {file_name}.pgn!")
+
+# Función principal
+def main():
+    str_matrix = []
+    game = []
+    
+    while True:
+        menu1()
+        choice1 = input("Choose an option: ")
+        if choice1 == "1":
+            while True:
+                menu2()
+                choice2 = input("Choose an option: ")
+                if choice2 == "1":
+                    moves(game)
+                elif choice2 == "2":
+                    str_matrix = tags()
+                elif choice2 == "3":
+                    statistics(game)
+                elif choice2 == "4":
+                    pgn(str_matrix, game)
+                elif choice2 == "5":
+                    break
+                else:
+                    print("Invalid option, try again.")
+        elif choice1 == "2":
+            print("This program allows you to record and save chess games in PGN format.")
+        elif choice1 == "3":
+            print("Exiting the program...")
+            break
+        else:
+            print("Invalid option, try again.")
+
 main()
 
